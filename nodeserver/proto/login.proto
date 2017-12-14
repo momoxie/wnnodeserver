@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "define.proto"; 
+
+message CS_Login {
+  string name = 1;
+  int32 id = 2;
+}
+
+message SC_Login {
+  ErrorCode errorCode = 1;  
+  int32 id = 2;
+}
