@@ -5,14 +5,12 @@ const WebSocket = require('ws');
 
 const app = express();
 
+var loginProto = require('./proto/proto-helper').loginProto;  
+var defineProto = require('./proto/proto-helper').defineProto;
+
 app.use(function (req, res) {
   res.send({ msg: "hello" });
 });
-
-// app.get('/', function(req, res){
-//   // res.sendFile(__dirname + '/index.html');
-//   res.end("hello client")
-// });
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
@@ -22,9 +20,25 @@ wss.on('connection', function connection(ws, req) {
   // You might use location.query.access_token to authenticate or share sessions
   // or req.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
   console.log('connection a user');
-  ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
-    ws.send("reply: %s",message);
+  ws.on('message', function incoming(reqData) {
+    // 接受请求数据并打印
+    var id = reqData.readUInt16LE();
+    console.log(id);
+    var messageBuffer = new Uint8Array(reqData);
+    var cs_Login = loginProto.CS_Login.deserializeBinary(messageBuffer);
+    console.log('received: %s  %s', cs_Login.getId(),cs_Login.getName());
+
+    // 回复请求
+    var sc_Login = new loginProto.SC_Login();
+    sc_Login.setCode(1);   
+    sc_Login.setId(9999);
+    var rmessageBuffer = new Buffer(sc_Login.serializeBinary()); //Uint8Array
+    var resData = new Buffer(rmessageBuffer.byteLength + 2);
+    resData.writeUInt16LE(1001);
+    rmessageBuffer.copy(resData,2);
+    ws.send(resData);
+  
+    // ws.close()
   });
   ws.on("close", function incoming(code,reason) {
     console.log('close: %s', reason);
@@ -34,7 +48,6 @@ wss.on('connection', function connection(ws, req) {
   });
 
   // ws.send('something');
-  // ws.close()
 
   // if (ws) {
   //   ws.onerror = ws.onopen = ws.onclose = null;

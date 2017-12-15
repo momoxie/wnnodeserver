@@ -61,3 +61,7 @@ typings/
 # Proto .cs
 nodeserver/proto/*.cs
 nodeserver/proto/*.js
+
+# workspace
+nodeserver.code-workspace
+nodeserver/database/data/redis-desktop-manager-0.9.0.51.dmg

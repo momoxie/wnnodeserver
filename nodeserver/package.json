@@ -1,14 +1,14 @@
 {
-  "name": "wsserver",
+  "name": "nodeserver",
   "version": "1.0.0",
-  "description": "test wsserver",
-  "main": "wsserver.js",
+  "description": "test nodeserver",
+  "main": "nodeserver.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/momoxie/wsserver"
+    "url": "https://github.com/momoxie/nodeserver"
   },
   "author": "momoxie",
   "license": "ISC",
